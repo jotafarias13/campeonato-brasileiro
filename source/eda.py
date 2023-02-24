@@ -158,3 +158,112 @@ print(full["tecnico_visitante"].value_counts(dropna=False, normalize=True))
 # Since almost 60% of the rows in both 'tecnico_mandante' and
 # 'tecnico_visitante' are null, these columns might not be
 # useful for our analysis.
+
+# Let's take a look at the 'vencedor' column
+
+logger.info("Analyzing 'vencedor' column")
+
+print(full["vencedor"])
+print(full["vencedor"].value_counts(normalize=True))
+
+# The values '-' represent draws. They comprise more than 26% of all results
+# Let's visualize a graph to better understand the data
+
+winner_values = (
+    full["vencedor"].str.replace(r"\B-\B", "Empate", regex=True).value_counts()
+)
+winners = winner_values.index
+fig, ax = plt.subplots(figsize=(8, 10))
+ax.barh(winners, winner_values)
+ax.set_yticks(ticks=winners, labels=winners, fontsize="x-small")
+ax.set_title("Quantidade de jogos vencidos por cada time")
+ax.set_ylabel("Time")
+ax.set_xlabel("Quantidade de jogos")
+ax.invert_yaxis()
+plt.show()
+
+# Now, let's take a look at the 'arena' column
+
+logger.info("Analyzing 'arena' column")
+
+print(full["arena"])
+print(full["arena"].value_counts(normalize=True))
+
+# We can see there is a weird character at the beginning of some values
+# Let's see what it is
+full["arena"].loc[0]
+
+# It looks like it is a special character '\xa0'. This means that if we use
+# this column in our prediction, we must clean these characters from each
+# value they appear in
+
+# Let's take a look at the 'mandante_Placar' and 'visitante_Placar' columns
+
+logger.info("Analyzing 'mandante_Placar' column")
+
+print(full["mandante_Placar"])
+print(full["mandante_Placar"].value_counts(normalize=True).sort_index())
+
+logger.info("Analyzing 'visitante_Placar' column")
+
+print(full["visitante_Placar"])
+print(full["visitante_Placar"].value_counts(normalize=True).sort_index())
+
+# The data suggests that it is more likely to score more goals playing home
+# compared to away. Which is to be expected from real experience
+# A graph may help visualize this behavior
+
+mandante_placar_values = full["mandante_Placar"].value_counts().sort_index()
+mandante_placar = mandante_placar_values.index
+visitante_placar_values = full["visitante_Placar"].value_counts().sort_index()
+visitante_placar = visitante_placar_values.index
+
+fig, ax = plt.subplots(figsize=(6, 6))
+ax.barh(mandante_placar, -mandante_placar_values)
+ax.barh(visitante_placar, visitante_placar_values, color="red")
+
+ax.invert_yaxis()
+
+ax.set_xticks(
+    range(-3000, 3001, 1000), labels=[3000, 2000, 1000, 0, 1000, 2000, 3000]
+)
+
+# removing axes (spines)
+for location in ["left", "right", "top", "bottom"]:
+    ax.spines[location].set_visible(False)
+
+# background box
+ax.axvline(x=0, color="black", linewidth=2)
+
+# rectangle
+ax.axvspan(xmin=-3000, xmax=3000, ymin=0, ymax=1, alpha=0.3, color="grey")
+
+# subtitles
+ax.text(0.2, 1.01, "Mandante", size=10, transform=ax.transAxes)
+ax.text(0.65, 1.01, "Visitante", size=10, transform=ax.transAxes)
+
+# title and lables
+ax.text(
+    0.05,
+    1.06,
+    "Gols de Mandante vs Visitante",
+    size=20,
+    transform=ax.transAxes,
+)
+ax.set_xlabel("Quantidade de jogos em que os gols ocorreram")
+ax.set_ylabel("Quantidade de gols no jogo")
+
+plt.show()
+
+# Let's take a look at the 'mandante_Estado' and 'visitante_Estado' columns
+
+logger.info("Analyzing 'mandante_Estado' and 'visitante_Estado' columns")
+
+print(full["mandante_Estado"])
+print(full["mandante_Estado"].value_counts(normalize=True))
+
+print(full["visitante_Estado"])
+print(full["visitante_Estado"].value_counts(normalize=True))
+
+# The state of the team may have a correlation with its chances of victory
+# so this column can be useful in the future

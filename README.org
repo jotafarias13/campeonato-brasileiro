@@ -1,0 +1,25 @@
+* Things to do with the data
+
+** ['ID', 'rodata', 'data', 'hora', 'mandante', 'visitante', 'formacao_mandante', 'formacao_visitante', 'tecnico_mandante', 'tecnico_visitante', 'vencedor', 'arena', 'mandante_Placar', 'visitante_Placar', 'mandante_Estado', 'visitante_Estado']
+** colunas de interesse para prever resultados de jogos
+** rodata: alguns times jogam melhor no início ou final do campeonato
+** data: alguns times jogam melhor durante a semana ou no fds? pegar o dia da semana
+** hora: alguns times jogam melhor pela manha, tarde ou noite? pegar so o turno
+** mandante/visitante: o time joga como mandante ou visitante?
+** formacao nao ajuda pois eh uma informacao liberada muito proxima da partida
+** tecnico eh uma informacao que pode atrapalhar mais do que ajudar
+** vencedor//mandante/visitante_Placar: saber quem ganhou
+** mandante/visitante_Estado: o estado do mandante pode ter correlacao com quem sai vitorioso
+** chutes a gol, posse de bola, gols e precisao de passes dos ultimos 5 jogos pode ajudar na predicao
+
+* Structure
+
+** 1-fetch_data.py
+** 2-eda.py
+** 3-preprocessing.py
+** 4-data_check.py
+** 5-data_segregation.py
+** 6-train.py
+** 7-test.py
+** pipeline_classes.py
+** sweeps.py
